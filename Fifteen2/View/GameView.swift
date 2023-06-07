@@ -12,39 +12,79 @@ struct GameView: View {
 	var columns = [GridItem(), GridItem(), GridItem(), GridItem()]
 	var body: some View {
 		VStack(alignment: .leading) {
-			Button {
-				viewModel.changeView(.mainMenu)
-				viewModel.saveGame()
-			} label: {
-				
-					Text("<Back")
+			
+			if viewModel.winGame {
+				Spacer()
+				HStack {
+					Spacer()
+					Text("You Win !!!")
+						.font(.system(size: 40))
+						.padding(.horizontal)
+					Spacer()
+				}
+				Spacer()
+				Button {
+					viewModel.changeView(.mainMenu)
+					viewModel.deleteSaveGame()
+				} label: {
+					HStack {
+						Spacer()
+						Text("Back in main menu")
+						Spacer()
+					}
+				}
+				.padding(.horizontal)
+				Spacer()
+			} else {
+				Button {
+					viewModel.changeView(.mainMenu)
+					viewModel.saveGame()
+				} label: {
 					
-			}
-			.padding(.horizontal)
-			Spacer()
-			HStack {
-				LazyVGrid(columns: columns, alignment: .center) {
-					ForEach(viewModel.field, id: \.self) {item in
-						Button {
-							print(viewModel.field)
-							viewModel.intentTapNumber(item)
-						} label: {
-							Text("\(item)")
-								.foregroundColor(.black)
-								.frame(width: 70, height: 70)
-								.background(Color(item == 0 ? .gray : .brown))
-								.padding(5)
+					Text("<Back")
+						.foregroundColor(.black)
+					
+				}
+				.padding(.horizontal)
+				Spacer()
+				HStack {
+					LazyVGrid(columns: columns, alignment: .center) {
+						ForEach(viewModel.field, id: \.self) {item in
+							Button {
+								print(viewModel.field)
+								viewModel.intentTapNumber(item)
+							} label: {
+								
+								if item == 0 {
+									Text("")
+								} else {
+									ZStack {
+										RoundedRectangle(cornerRadius: 5)
+											.frame(width: 70, height: 70)
+											.foregroundColor(Color("NumberButtonColor"))
+											.opacity(0.6)
+											.shadow(color: Color("ShadowButtonColor") ,radius: 2, x: 1, y: 2)
+											.shadow(color:.white, radius: 2, x: -1, y: -2)
+										Text("\(item)")
+											.foregroundColor(.black)
+									}
+								}
+							}
 						}
 					}
 				}
+				.onAppear{
+					if viewModel.currentView == .newGameView {
+						viewModel.newGame()
+					}
+				}
 			}
-			.onAppear{
-				if viewModel.currentView == .newGameView {
-					viewModel.newGame()
-				} 
-			}
+			
 			Spacer()
 		}
+		.background(Color("NumberButtonColor"))
+		.background(ignoresSafeAreaEdges: .all)
+		
 	}
 }
 

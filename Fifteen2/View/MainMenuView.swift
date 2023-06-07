@@ -12,28 +12,36 @@ struct MainMenuView: View {
 	@ObservedObject var viewModel: ViewModel 
 	
     var body: some View {
+		let saveGameExist = viewModel.checkUserDefaults()
 		NavigationView {
 			VStack {
+				
+				if saveGameExist {
+					Button {
+						viewModel.changeView(.continueGameView)
+					} label: {
+						Text("Continue")
+					}
+					.buttonStyle(MenuButtonStyle())
+				}
+				
 				Button {
 					viewModel.changeView(.newGameView)
 				} label: {
 					Text("New Game")
 				}
-				Button {
-					viewModel.changeView(.continueGameView)
-				} label: {
-					Text("Continue")
-				}
-				Button {
-					
-				} label: {
-					Text("Settings")
-				}
+				.buttonStyle(MenuButtonStyle())
+				
+				Spacer()
 			}
 			.padding()
 			.navigationTitle("Fifteen")
+			
 		}
     }
+	
+	
+	
 }
 
 struct MainMenuView_Previews: PreviewProvider {

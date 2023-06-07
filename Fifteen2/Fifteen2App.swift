@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct Fifteen2App: App {
+	@State private var appId = "6446114469"
     var body: some Scene {
         WindowGroup {
             ContentView()

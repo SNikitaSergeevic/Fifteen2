@@ -11,13 +11,16 @@ import Foundation
 
 struct Model {
 	var field: [Int8] = []
-	
+	var winGame: Bool = false
+	var winCondition: [Int8] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
 	mutating func newGame() -> [Int8] {
 		field = []
 		for item in 0...15 {
 			field.append(Int8(item))
 		}
+//		field[0] = 1
+//		field[1] = 0
 		field.shuffle()
 		return field
 	}
@@ -30,8 +33,16 @@ struct Model {
 		print("0 with index: \(indexZero) ")
 		
 		return changeNumberWithZero(indexZero: indexZero, indexNumber: indexNumber)
+	}
+	
+	func checkWinGame() -> Bool{
+		var result = false
 		
+		if field == winCondition {
+			result = true
+		}
 		
+		return result
 	}
 	
 	private func checkNumberIndex(_ number: Int8) -> Int {
@@ -52,6 +63,11 @@ struct Model {
 			
 				self.field[indexZero] = self.field[indexNumber]
 				self.field[indexNumber] = 0
+			if checkWinGame() {
+				winGame = true
+			} else {
+				winGame = false
+			}
 			
 		}
 		
@@ -72,6 +88,23 @@ struct Model {
 		let saved = defaults.object(forKey: "Field")
 		field = saved as! Array<Int8>
 		return field
+	}
+	
+	func checkUserDefaults() -> Bool {
+		let defaults = UserDefaults.standard
+		var toggle = false
+		
+		if let _ = defaults.object(forKey: "Field") {
+			toggle = true
+		}
+		
+		return toggle
+	}
+	
+	func deleteSaveGame() {
+		let defaults = UserDefaults.standard
+		defaults.removeObject(forKey: "Field")
+		
 	}
 	
 }

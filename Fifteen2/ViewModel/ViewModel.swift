@@ -13,7 +13,9 @@ class ViewModel: ObservableObject {
 	
 	@Published var currentView: CurrentView = .mainMenu
 	
-	@Published var field: [Int8] = []
+	@Published var field: [Int8] = Array(repeating: 1, count: 16)
+	
+	@Published var winGame = false
 	
 	func newGame() {
 		field = model.newGame()
@@ -41,9 +43,18 @@ class ViewModel: ObservableObject {
 	
 	func intentTapNumber(_ number: Int8) {
 		field = model.tappedNumber(number)
+		winGame = model.winGame
 	}
 	
+	func checkUserDefaults() -> Bool {
+		model.checkUserDefaults()
+	}
 	
+	func deleteSaveGame() {
+		model.deleteSaveGame()
+		newGame()
+		winGame = false
+	}
 	
 	
 }
